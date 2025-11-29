@@ -372,6 +372,36 @@ The trait provides:
 - `protected Uuid $id` - UUID primary key (requires manual initialization in constructor)
 - `getId(): string` - Returns the UUID as string
 
+## Helper Functions
+
+The bundle provides utility functions for UUID binary conversion:
+
+```php
+use function TeamMatePro\DoctrineUtilsBundle\Utils\binary;
+use function TeamMatePro\DoctrineUtilsBundle\Utils\binaryUnwrap;
+
+// Convert UUID string to binary (for Doctrine queries)
+$binaryId = binary('550e8400-e29b-41d4-a716-446655440000');
+
+// Convert multiple UUIDs to binary
+$binaryIds = binary(['uuid1', 'uuid2', 'uuid3']);
+
+// Convert binary back to UUID string
+$uuidString = binaryUnwrap($binaryId);
+```
+
+### Usage in Doctrine Queries
+
+```php
+use function TeamMatePro\DoctrineUtilsBundle\Utils\binary;
+
+$qb = $entityManager->createQueryBuilder();
+$qb->select('e')
+   ->from(Entity::class, 'e')
+   ->where('e.id IN (:ids)')
+   ->setParameter('ids', binary($uuidStrings));
+```
+
 ## Troubleshooting
 
 ### Verify Factory Registration

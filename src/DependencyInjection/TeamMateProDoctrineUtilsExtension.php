@@ -34,28 +34,37 @@ final class TeamMateProDoctrineUtilsExtension extends Extension
         );
         $loader->load('services.yaml');
 
+        /** @var bool $enableFilePersistence */
+        $enableFilePersistence = $config['enable_file_persistence'];
+        /** @var string $fileEntityClass */
+        $fileEntityClass = $config['file_entity_class'];
+        /** @var string $storageService */
+        $storageService = $config['storage_service'];
+        /** @var bool $enableTimestampListener */
+        $enableTimestampListener = $config['enable_timestamp_listener'];
+
         // Set parameters for potential use by other services
         $container->setParameter(
             'team_mate_pro_doctrine_utils.enable_file_persistence',
-            $config['enable_file_persistence']
+            $enableFilePersistence
         );
         $container->setParameter(
             'team_mate_pro_doctrine_utils.file_entity_class',
-            $config['file_entity_class']
+            $fileEntityClass
         );
 
         // Conditionally register or remove the file persistence listener
-        if ($config['enable_file_persistence']) {
+        if ($enableFilePersistence) {
             $definition = $container->getDefinition(FilePersistenceListener::class);
-            $definition->setArgument('$fileEntityClass', $config['file_entity_class']);
-            $definition->setArgument('$storage', new Reference($config['storage_service']));
+            $definition->setArgument('$fileEntityClass', $fileEntityClass);
+            $definition->setArgument('$storage', new Reference($storageService));
         } else {
             // Remove the service entirely if disabled
             $container->removeDefinition(FilePersistenceListener::class);
         }
 
         // Conditionally register or remove the timestamp listener
-        if (!$config['enable_timestamp_listener']) {
+        if (!$enableTimestampListener) {
             $container->removeDefinition(TimestampListener::class);
         }
     }

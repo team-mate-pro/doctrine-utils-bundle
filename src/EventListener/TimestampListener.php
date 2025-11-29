@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace TeamMatePro\DoctrineUtilsBundle\EventListener;
 
 use Doctrine\Persistence\Event\LifecycleEventArgs;
-use TeamMatePro\Contracts\Entity\TimeStampAbleInterface;
+use TeamMatePro\Contracts\Model\TimeStampAbleInterface;
 
 /**
  * Doctrine event listener that automatically timestamps entities.

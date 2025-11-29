@@ -29,6 +29,9 @@ final readonly class FilePersistenceListener
     ) {
     }
 
+    /**
+     * @param LifecycleEventArgs<\Doctrine\Persistence\ObjectManager> $args
+     */
     public function postPersist(LifecycleEventArgs $args): void
     {
         $object = $args->getObject();
@@ -51,6 +54,9 @@ final readonly class FilePersistenceListener
         );
     }
 
+    /**
+     * @param LifecycleEventArgs<\Doctrine\Persistence\ObjectManager> $args
+     */
     public function postRemove(LifecycleEventArgs $args): void
     {
         $entity = $args->getObject();

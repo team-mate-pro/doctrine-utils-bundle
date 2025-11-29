@@ -1,7 +1,7 @@
 {
   "name": "team-mate-pro/doctrine-utils-bundle",
   "description": "Doctrine utilities bundle for Team Mate Pro - handles file persistence and other Doctrine enhancements",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "symfony-bundle",
   "license": "MIT",
   "require": {
@@ -20,7 +20,10 @@
   "autoload": {
     "psr-4": {
       "TeamMatePro\\DoctrineUtilsBundle\\": "src/"
-    }
+    },
+    "files": [
+      "src/Utils/doctrine-util.php"
+    ]
   },
   "scripts": {
     "phpunit": "APP_ENV=test ./vendor/bin/phpunit tests --testdox --colors=always",
@@ -29,6 +32,11 @@
     "phpcs:fix": "php ./vendor/bin/phpcbf --standard=phpcs.xml --exclude=Generic.Files.LineLength",
     "phpstan": "php vendor/phpstan/phpstan/phpstan analyse --memory-limit=1G",
     "phpstan:baseline": "php vendor/phpstan/phpstan/phpstan analyse --memory-limit=1G --generate-baseline"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "TeamMatePro\\DoctrineUtilsBundle\\Tests\\": "tests/"
+    }
   },
   "require-dev": {
     "phpunit/phpunit": "^10.0",

@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use TeamMatePro\DoctrineUtilsBundle\EventListener\FilePersistenceListener;
+use TeamMatePro\DoctrineUtilsBundle\EventListener\TimestampListener;
 
 /**
  * Extension class that loads and processes bundle configuration.
@@ -51,6 +52,11 @@ final class TeamMateProDoctrineUtilsExtension extends Extension
         } else {
             // Remove the service entirely if disabled
             $container->removeDefinition(FilePersistenceListener::class);
+        }
+
+        // Conditionally register or remove the timestamp listener
+        if (!$config['enable_timestamp_listener']) {
+            $container->removeDefinition(TimestampListener::class);
         }
     }
 }

@@ -6,6 +6,7 @@ A Symfony bundle providing Doctrine utilities for file persistence with Flysyste
 
 - Automatic file upload to Flysystem storage on entity persist
 - Automatic file deletion from storage on entity removal
+- Automatic entity timestamping (createdAt/updatedAt)
 - Configurable storage backends (local, S3, Azure, etc.)
 - Enable/disable functionality via configuration
 - Factory pattern for flexible entity integration
@@ -40,9 +41,16 @@ return [
 Create `config/packages/team_mate_pro_doctrine_utils.yaml`:
 
 ```yaml
+# Full configuration (copy-paste ready)
 team_mate_pro_doctrine_utils:
-    enable_file_persistence: true
-    storage_service: 'defaultStorage'  # Your Flysystem service ID
+    # Enable automatic file persistence on Doctrine entities
+    enable_file_persistence: false
+
+    # Flysystem storage service ID to use for file persistence
+    storage_service: 'defaultStorage'
+
+    # Enable automatic timestamping on entities implementing TimeStampAbleInterface
+    enable_timestamp_listener: false
 ```
 
 ### Configuration Options
@@ -51,6 +59,7 @@ team_mate_pro_doctrine_utils:
 |--------|------|---------|-------------|
 | `enable_file_persistence` | boolean | `false` | Enable/disable the file persistence listener |
 | `storage_service` | string | `'defaultStorage'` | Flysystem storage service ID |
+| `enable_timestamp_listener` | boolean | `false` | Enable/disable the timestamp listener |
 
 ## Setup
 
@@ -237,6 +246,67 @@ public function testFileUpload(): void
     $this->assertTrue($storage->fileExists($file->getId()));
 }
 ```
+
+## Timestamp Listener
+
+The bundle provides automatic timestamping for entities implementing `TimeStampAbleInterface`.
+
+### Setup
+
+1. Enable the listener in configuration:
+
+```yaml
+team_mate_pro_doctrine_utils:
+    enable_timestamp_listener: true
+```
+
+2. Implement `TimeStampAbleInterface` on your entity:
+
+```php
+<?php
+
+namespace App\Entity;
+
+use DateTimeImmutable;
+use DateTimeInterface;
+use Doctrine\ORM\Mapping as ORM;
+use TeamMatePro\Contracts\Entity\TimeStampAbleInterface;
+
+#[ORM\Entity]
+class MyEntity implements TimeStampAbleInterface
+{
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?DateTimeInterface $createdAt = null;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?DateTimeInterface $updatedAt = null;
+
+    public function getCreatedAt(): ?DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt(): ?DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function timestamp(): void
+    {
+        $now = new DateTimeImmutable();
+
+        if ($this->createdAt === null) {
+            $this->createdAt = $now;
+        }
+
+        $this->updatedAt = $now;
+    }
+}
+```
+
+The listener automatically calls `timestamp()` on:
+- `prePersist` - When entity is first persisted
+- `preUpdate` - When entity is updated
 
 ## Entity Traits
 

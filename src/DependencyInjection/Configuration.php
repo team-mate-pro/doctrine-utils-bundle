@@ -33,6 +33,10 @@ final class Configuration implements ConfigurationInterface
                     ->defaultValue('defaultStorage')
                     ->info('Flysystem storage service ID to use for file persistence')
                 ->end()
+                ->booleanNode('enable_timestamp_listener')
+                    ->defaultFalse()
+                    ->info('Enable automatic timestamping on entities implementing TimeStampAbleInterface')
+                ->end()
             ->end();
 
         return $treeBuilder;

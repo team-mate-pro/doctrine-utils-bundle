@@ -35,3 +35,15 @@ parameters:
 			identifier: trait.unused
 			count: 1
 			path: src/Trait/UuidIdTrait.php
+
+		-
+			message: '#^Class TeamMatePro\\Contracts\\Entity\\TimeStampAbleInterface not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/EventListener/TimestampListener.php
+
+		-
+			message: '#^Call to method timestamp\(\) on an unknown class TeamMatePro\\Contracts\\Entity\\TimeStampAbleInterface\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/EventListener/TimestampListener.php

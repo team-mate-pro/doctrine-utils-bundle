@@ -1,0 +1,12 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    container_name: doctrine-utils-app
+    volumes:
+      - .:/app
+      - ./vendor:/app/vendor
+    working_dir: /app
+    tty: true
+    stdin_open: true

@@ -1,0 +1,12 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+
+  # File Persistence Listener
+  # Arguments ($fileEntityClass and $storage) will be set by the Extension based on configuration
+  # Tags will conditionally register this as a Doctrine event listener
+  TeamMatePro\DoctrineUtilsBundle\EventListener\FilePersistenceListener:
+    tags:
+      - { name: doctrine.event_listener, event: postPersist }
+      - { name: doctrine.event_listener, event: postRemove }

@@ -13,12 +13,6 @@ parameters:
 			path: src/DependencyInjection/TeamMateProDoctrineUtilsExtension.php
 
 		-
-			message: '#^Parameter \$file of method TeamMatePro\\DoctrineUtilsBundle\\Entity\\FileEntityInterface\:\:createFromInterface\(\) has invalid type TeamMatePro\\Contracts\\Model\\FileInterface\.$#'
-			identifier: class.notFound
-			count: 2
-			path: src/Entity/FileEntityInterface.php
-
-		-
 			message: '#^Method TeamMatePro\\DoctrineUtilsBundle\\EventListener\\FilePersistenceListener\:\:postPersist\(\) has parameter \$args with generic class Doctrine\\Persistence\\Event\\LifecycleEventArgs but does not specify its types\: TObjectManager$#'
 			identifier: missingType.generics
 			count: 1
@@ -29,3 +23,15 @@ parameters:
 			identifier: missingType.generics
 			count: 1
 			path: src/EventListener/FilePersistenceListener.php
+
+		-
+			message: '#^Trait TeamMatePro\\DoctrineUtilsBundle\\Trait\\AutoIncrementIdTrait is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: src/Trait/AutoIncrementIdTrait.php
+
+		-
+			message: '#^Trait TeamMatePro\\DoctrineUtilsBundle\\Trait\\UuidIdTrait is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: src/Trait/UuidIdTrait.php

@@ -26,7 +26,7 @@ final class Configuration implements ConfigurationInterface
                     ->info('Enable automatic file persistence on Doctrine entities')
                 ->end()
                 ->scalarNode('file_entity_class')
-                    ->defaultValue('App\\Core\\Entity\\File')
+                    ->defaultValue('App\\Entity\\File')
                     ->info('FQCN of the File entity class to watch for persistence events')
                 ->end()
                 ->scalarNode('storage_service')

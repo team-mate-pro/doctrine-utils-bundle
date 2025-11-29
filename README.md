@@ -9,7 +9,7 @@ A Symfony bundle providing Doctrine utilities for file persistence with Flysyste
 - Configurable storage backends (local, S3, Azure, etc.)
 - Enable/disable functionality via configuration
 - Factory pattern for flexible entity integration
-- Reusable entity traits (AutoIncrementIdTrait)
+- Reusable entity traits (AutoIncrementIdTrait, UuidIdTrait)
 
 ## Requirements
 
@@ -267,6 +267,40 @@ class MyEntity
 The trait provides:
 - `protected ?int $id` - Auto-incrementing primary key
 - `getId(): string` - Returns the ID as string (or `'N/A'` if not yet persisted)
+
+### UuidIdTrait
+
+Provides UUID-based ID functionality for Doctrine entities using Symfony UID component.
+
+```php
+<?php
+
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
+use TeamMatePro\DoctrineUtilsBundle\Trait\UuidIdTrait;
+
+#[ORM\Entity]
+class MyEntity
+{
+    use UuidIdTrait;
+
+    #[ORM\Column(type: 'string')]
+    private string $name;
+
+    public function __construct()
+    {
+        $this->id = Uuid::v4();
+    }
+
+    // ... other properties
+}
+```
+
+The trait provides:
+- `protected Uuid $id` - UUID primary key (requires manual initialization in constructor)
+- `getId(): string` - Returns the UUID as string
 
 ## Troubleshooting
 

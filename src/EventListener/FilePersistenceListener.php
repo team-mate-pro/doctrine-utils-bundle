@@ -43,7 +43,7 @@ final readonly class FilePersistenceListener
             location: $entity->getId(),
             contents: (new UploadedFile(
                 path: $entity->getRealPath(),
-                originalName: $entity->getName(),
+                originalName: $entity->getName() ?? '',
                 mimeType: $entity->getMime(),
                 error: null,
                 test: true

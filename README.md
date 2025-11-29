@@ -49,7 +49,7 @@ team_mate_pro_doctrine_utils:
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `enable_file_persistence` | boolean | `true` | Enable/disable the file persistence listener |
+| `enable_file_persistence` | boolean | `false` | Enable/disable the file persistence listener |
 | `storage_service` | string | `'defaultStorage'` | Flysystem storage service ID |
 
 ## Setup

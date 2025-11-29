@@ -22,7 +22,7 @@ final class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->booleanNode('enable_file_persistence')
-                    ->defaultTrue()
+                    ->defaultFalse()
                     ->info('Enable automatic file persistence on Doctrine entities')
                 ->end()
                 ->scalarNode('file_entity_class')

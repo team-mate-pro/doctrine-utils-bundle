@@ -9,6 +9,7 @@ A Symfony bundle providing Doctrine utilities for file persistence with Flysyste
 - Configurable storage backends (local, S3, Azure, etc.)
 - Enable/disable functionality via configuration
 - Factory pattern for flexible entity integration
+- Reusable entity traits (AutoIncrementIdTrait)
 
 ## Requirements
 
@@ -236,6 +237,36 @@ public function testFileUpload(): void
     $this->assertTrue($storage->fileExists($file->getId()));
 }
 ```
+
+## Entity Traits
+
+### AutoIncrementIdTrait
+
+Provides auto-incrementing integer ID functionality for Doctrine entities.
+
+```php
+<?php
+
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use TeamMatePro\DoctrineUtilsBundle\Trait\AutoIncrementIdTrait;
+
+#[ORM\Entity]
+class MyEntity
+{
+    use AutoIncrementIdTrait;
+
+    #[ORM\Column(type: 'string')]
+    private string $name;
+
+    // ... other properties
+}
+```
+
+The trait provides:
+- `protected ?int $id` - Auto-incrementing primary key
+- `getId(): string` - Returns the ID as string (or `'N/A'` if not yet persisted)
 
 ## Troubleshooting
 

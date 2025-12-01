@@ -16,7 +16,7 @@ use TeamMatePro\Contracts\Model\TimeStampAbleInterface;
  *
  * Entities must implement TimeStampAbleInterface from team-mate-pro/contracts.
  */
-final class TimestampListener
+class TimestampListener
 {
     /**
      * @param LifecycleEventArgs<\Doctrine\Persistence\ObjectManager> $args

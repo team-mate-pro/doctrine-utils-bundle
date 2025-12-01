@@ -19,11 +19,17 @@ use TeamMatePro\DoctrineUtilsBundle\Factory\EntityFileFactoryInterface;
  *
  * The entity class MUST implement FileEntityInterface.
  */
-final readonly class FilePersistenceListener
+class FilePersistenceListener
 {
+    /**
+     * @param FilesystemOperator $storage Flysystem storage for persisting files
+     * @param EntityFileFactoryInterface $factory Factory to create file entities
+     * @param class-string|null $fileEntityClass Optional: FQCN of file entity class (for filtering)
+     */
     public function __construct(
         private FilesystemOperator $storage,
         private EntityFileFactoryInterface $factory,
+        private ?string $fileEntityClass = null,
     ) {
     }
 
@@ -32,13 +38,11 @@ final readonly class FilePersistenceListener
      */
     public function postPersist(LifecycleEventArgs $args): void
     {
-        $object = $args->getObject();
+        $entity = $args->getObject();
 
-        if (!$object instanceof FileInterface) {
+        if (!$entity instanceof FileInterface) {
             return;
         }
-
-        $entity = $this->factory->createFromInterface($object);
 
         $this->storage->write(
             location: $entity->getId(),

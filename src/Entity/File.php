@@ -14,7 +14,7 @@ use TeamMatePro\DoctrineUtilsBundle\Trait\UuidIdTrait;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'files')]
-final class File implements FileInterface
+class File implements FileInterface
 {
     use UuidIdTrait;
 
@@ -69,7 +69,7 @@ final class File implements FileInterface
             name: $uploadedFile->getClientOriginalName(),
             mime: $uploadedFile->getClientMimeType(),
             bytes: $uploadedFile->getSize() ?: 0,
-            realPath: $uploadedFile->getRealPath() ?: '',
+            realPath: $uploadedFile->getRealPath() ?: '/',
         );
     }
 

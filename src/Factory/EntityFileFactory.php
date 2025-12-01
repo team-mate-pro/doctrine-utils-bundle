@@ -7,7 +7,7 @@ namespace TeamMatePro\DoctrineUtilsBundle\Factory;
 use TeamMatePro\Contracts\Model\FileInterface;
 use TeamMatePro\DoctrineUtilsBundle\Entity\File;
 
-final readonly class EntityFileFactory implements EntityFileFactoryInterface
+class EntityFileFactory implements EntityFileFactoryInterface
 {
     public function createFromInterface(FileInterface $file): FileInterface
     {

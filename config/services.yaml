@@ -2,6 +2,8 @@ services:
   _defaults:
     autowire: true
     autoconfigure: false
+    bind:
+      $fileEntityClass: TeamMatePro\DoctrineUtilsBundle\Entity\File
 
   # File Persistence Listener
   # Arguments ($fileEntityClass and $storage) will be set by the Extension based on configuration

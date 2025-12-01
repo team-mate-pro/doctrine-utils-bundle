@@ -6,10 +6,8 @@ namespace TeamMatePro\DoctrineUtilsBundle\EventListener;
 
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use League\Flysystem\FilesystemOperator;
-use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use TeamMatePro\Contracts\Model\FileInterface;
-use TeamMatePro\DoctrineUtilsBundle\Entity\FileEntityInterface;
 use TeamMatePro\DoctrineUtilsBundle\Factory\EntityFileFactoryInterface;
 
 /**

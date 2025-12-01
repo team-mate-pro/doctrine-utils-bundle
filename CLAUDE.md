@@ -51,9 +51,10 @@ src/
 │   ├── UuidIdTrait.php                  # Symfony Uuid-based primary key
 │   └── AutoIncrementIdTrait.php         # Integer auto-increment primary key
 ├── Entity/
-│   └── FileEntityInterface.php
+│   └── File.php                          # Default File entity with UuidIdTrait
 ├── Factory/
-│   └── EntityFileFactoryInterface.php
+│   ├── EntityFileFactoryInterface.php
+│   └── EntityFileFactory.php             # Default factory implementation
 └── Utils/
     └── doctrine-util.php                # binary() and binaryUnwrap() functions
 ```

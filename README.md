@@ -63,9 +63,75 @@ team_mate_pro_doctrine_utils:
 
 ## Setup
 
-### 1. Implement the FileInterface
+### 1. Use the Built-in File Entity (Recommended)
 
-Your file entity must implement `TeamMatePro\Contracts\Model\FileInterface`:
+The bundle provides a ready-to-use `File` entity with UUID-based IDs:
+
+```php
+use TeamMatePro\DoctrineUtilsBundle\Entity\File;
+
+$file = new File(
+    name: 'document.pdf',
+    mime: 'application/pdf',
+    bytes: filesize('/tmp/upload.pdf'),
+    realPath: '/tmp/upload.pdf',
+);
+
+$entityManager->persist($file);
+$entityManager->flush();
+```
+
+The built-in `File` entity:
+- Uses `UuidIdTrait` for UUID-based primary keys
+- Implements `FileInterface` from `team-mate-pro/contracts`
+- Includes `isWebImage()` helper method
+- Supports optional `fileUrl` for public URLs (S3, CDN, etc.)
+- Provides `File::createFromUploadedFile(UploadedFile $file)` for Symfony file uploads
+- Provides `File::createFromInterface(FileInterface $file)` for copying from other implementations
+
+#### Register Doctrine Mapping for the Built-in Entity
+
+To use the built-in `File` entity, you need to register its mapping in your Doctrine configuration.
+
+Add to `config/packages/doctrine.yaml`:
+
+```yaml
+doctrine:
+    orm:
+        mappings:
+            TeamMateProDoctrineUtilsBundle:
+                is_bundle: false
+                type: attribute
+                dir: '%kernel.project_dir%/vendor/team-mate-pro/doctrine-utils-bundle/src/Entity'
+                prefix: 'TeamMatePro\DoctrineUtilsBundle\Entity'
+                alias: DoctrineUtilsBundle
+```
+
+Then generate and run the migration:
+
+```bash
+# Generate migration for the files table
+php bin/console doctrine:migrations:diff
+
+# Review the generated migration, then run it
+php bin/console doctrine:migrations:migrate
+```
+
+The migration will create the `files` table with the following structure:
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `id` | uuid (binary) | Primary key (UUID v4) |
+| `name` | varchar(255) | Original filename |
+| `mime` | varchar(100) | MIME type |
+| `bytes` | integer | File size in bytes |
+| `real_path` | varchar(500) | Path to the file on disk |
+| `created_at` | datetime_immutable | Creation timestamp |
+| `file_url` | varchar(500), nullable | Public URL (CDN, S3, etc.) |
+
+### 2. Custom File Entity (Optional)
+
+If you need a custom entity, implement `TeamMatePro\Contracts\Model\FileInterface`:
 
 ```php
 <?php
@@ -76,86 +142,46 @@ use Doctrine\ORM\Mapping as ORM;
 use TeamMatePro\Contracts\Model\FileInterface;
 
 #[ORM\Entity]
-class File implements FileInterface
+class CustomFile implements FileInterface
 {
-    #[ORM\Id]
-    #[ORM\Column(type: 'string', length: 36)]
-    private string $id;
-
-    #[ORM\Column(type: 'string')]
-    private string $name;
-
-    #[ORM\Column(type: 'string')]
-    private string $mime;
-
-    #[ORM\Column(type: 'integer')]
-    private int $bytes;
-
-    #[ORM\Column(type: 'string')]
-    private string $realPath;
-
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getMime(): string
-    {
-        return $this->mime;
-    }
-
-    public function getBytes(): int
-    {
-        return $this->bytes;
-    }
-
-    public function getRealPath(): string
-    {
-        return $this->realPath;
-    }
+    // Implement required methods: getId(), getName(), getMime(),
+    // getBytes(), getRealPath(), getCreatedAt(), isWebImage(), getFileUrl()
 }
 ```
 
-### 2. Implement the EntityFileFactory
-
-Create a factory that implements `EntityFileFactoryInterface`:
+Then create a custom factory implementing `EntityFileFactoryInterface`:
 
 ```php
 <?php
 
 namespace App\Factory;
 
+use App\Entity\CustomFile;
 use TeamMatePro\Contracts\Model\FileInterface;
 use TeamMatePro\DoctrineUtilsBundle\Factory\EntityFileFactoryInterface;
 
-class EntityFileFactory implements EntityFileFactoryInterface
+class CustomFileFactory implements EntityFileFactoryInterface
 {
     public function createFromInterface(FileInterface $file): FileInterface
     {
-        // Add validation, transformation, or simply return the file
-        return $file;
+        return new CustomFile(
+            // map properties from $file
+        );
     }
 }
 ```
 
-### 3. Register the Factory
-
-In `config/services.yaml`:
+Register your custom factory in `config/services.yaml`:
 
 ```yaml
 services:
-    App\Factory\EntityFileFactory: ~
+    App\Factory\CustomFileFactory: ~
 
     TeamMatePro\DoctrineUtilsBundle\Factory\EntityFileFactoryInterface:
-        alias: App\Factory\EntityFileFactory
+        alias: App\Factory\CustomFileFactory
 ```
 
-### 4. Configure Flysystem Storage
+### 3. Configure Flysystem Storage
 
 Using `league/flysystem-bundle`:
 
@@ -185,13 +211,15 @@ services:
 Once configured, the bundle automatically handles file persistence:
 
 ```php
+use TeamMatePro\DoctrineUtilsBundle\Entity\File;
+
 // Upload - file is automatically stored when entity is persisted
-$file = new File();
-$file->setId(Uuid::uuid4()->toString());
-$file->setName('document.pdf');
-$file->setMime('application/pdf');
-$file->setBytes(filesize('/tmp/upload.pdf'));
-$file->setRealPath('/tmp/upload.pdf');
+$file = new File(
+    name: 'document.pdf',
+    mime: 'application/pdf',
+    bytes: filesize('/tmp/upload.pdf'),
+    realPath: '/tmp/upload.pdf',
+);
 
 $entityManager->persist($file);
 $entityManager->flush();

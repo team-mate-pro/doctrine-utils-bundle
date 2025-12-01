@@ -17,3 +17,10 @@ services:
     tags:
       - { name: doctrine.event_listener, event: prePersist }
       - { name: doctrine.event_listener, event: preUpdate }
+
+  # Entity File Factory
+  # Default factory that creates File entities from FileInterface
+  TeamMatePro\DoctrineUtilsBundle\Factory\EntityFileFactory: ~
+
+  TeamMatePro\DoctrineUtilsBundle\Factory\EntityFileFactoryInterface:
+    alias: TeamMatePro\DoctrineUtilsBundle\Factory\EntityFileFactory

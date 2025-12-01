@@ -1,7 +1,7 @@
 {
   "name": "team-mate-pro/doctrine-utils-bundle",
   "description": "Doctrine utilities bundle for Team Mate Pro - handles file persistence and other Doctrine enhancements",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "type": "symfony-bundle",
   "license": "MIT",
   "require": {

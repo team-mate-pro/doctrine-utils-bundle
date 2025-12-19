@@ -192,6 +192,77 @@ final class FileTest extends TestCase
         self::assertSame($expected, $file->isWebImage());
     }
 
+    #[Test]
+    public function itCreatesFromBase64WithDataUri(): void
+    {
+        $base64 = $this->getTestImageBase64();
+        $dataUri = 'data:image/png;base64,' . $base64;
+
+        $file = File::fromBase64($dataUri);
+
+        self::assertSame('image/png', $file->getMime());
+        self::assertGreaterThan(0, $file->getBytes());
+        self::assertFileExists($file->getRealPath());
+        self::assertNotNull($file->getName());
+        self::assertMatchesRegularExpression('/\.png$/', $file->getName());
+
+        @unlink($file->getRealPath());
+    }
+
+    #[Test]
+    public function itCreatesFromBase64WithoutDataUri(): void
+    {
+        $base64 = $this->getTestImageBase64();
+
+        $file = File::fromBase64($base64);
+
+        self::assertSame('image/png', $file->getMime());
+        self::assertGreaterThan(0, $file->getBytes());
+        self::assertFileExists($file->getRealPath());
+
+        @unlink($file->getRealPath());
+    }
+
+    #[Test]
+    public function itCreatesFromBase64WithCustomName(): void
+    {
+        $base64 = $this->getTestImageBase64();
+
+        $file = File::fromBase64($base64, 'custom-image.png');
+
+        self::assertSame('custom-image.png', $file->getName());
+        self::assertSame('image/png', $file->getMime());
+
+        @unlink($file->getRealPath());
+    }
+
+    #[Test]
+    public function itThrowsExceptionForInvalidBase64(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid base64 string provided.');
+
+        File::fromBase64('!!!invalid-base64!!!');
+    }
+
+    #[Test]
+    public function itCalculatesCorrectBytesFromBase64(): void
+    {
+        $base64 = $this->getTestImageBase64();
+        $expectedBytes = strlen(base64_decode($base64));
+
+        $file = File::fromBase64($base64);
+
+        self::assertSame($expectedBytes, $file->getBytes());
+
+        @unlink($file->getRealPath());
+    }
+
+    private function getTestImageBase64(): string
+    {
+        return base64_encode((string) file_get_contents(__DIR__ . '/file-image-test.png'));
+    }
+
     private function createFile(): File
     {
         return new File(

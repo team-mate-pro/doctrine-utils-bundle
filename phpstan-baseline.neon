@@ -1,2 +1,13 @@
 parameters:
-	ignoreErrors: []
+	ignoreErrors:
+		-
+			message: '#^Property TeamMatePro\\DoctrineUtilsBundle\\EventListener\\FilePersistenceListener\:\:\$factory is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/EventListener/FilePersistenceListener.php
+
+		-
+			message: '#^Property TeamMatePro\\DoctrineUtilsBundle\\EventListener\\FilePersistenceListener\:\:\$fileEntityClass is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/EventListener/FilePersistenceListener.php

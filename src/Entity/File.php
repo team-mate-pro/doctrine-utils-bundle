@@ -19,20 +19,24 @@ class File implements FileInterface
 {
     use UuidIdTrait;
 
+    /**
+     * Note: Not using `readonly` to maintain compatibility with Doctrine ORM 3.x
+     * lazy ghost objects which hydrate properties via reflection after construction.
+     */
     #[ORM\Column(type: 'string', length: 255)]
-    private readonly string $name;
+    private string $name;
 
     #[ORM\Column(type: 'string', length: 100)]
-    private readonly string $mime;
+    private string $mime;
 
     #[ORM\Column(type: 'integer')]
-    private readonly int $bytes;
+    private int $bytes;
 
     #[ORM\Column(type: 'string', length: 500)]
-    private readonly string $realPath;
+    private string $realPath;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private readonly DateTimeImmutable $createdAt;
+    private DateTimeImmutable $createdAt;
 
     #[ORM\Column(type: 'string', length: 500, nullable: true)]
     private ?string $fileUrl;

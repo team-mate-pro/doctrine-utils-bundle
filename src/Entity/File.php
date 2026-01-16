@@ -22,18 +22,21 @@ class File implements FileInterface
     /**
      * Note: Not using `readonly` to maintain compatibility with Doctrine ORM 3.x
      * lazy ghost objects which hydrate properties via reflection after construction.
+     *
+     * Default values are provided to prevent "must not be accessed before initialization"
+     * errors when Doctrine ORM 3.x lazy ghosts are accessed before being fully hydrated.
      */
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $name;
+    #[ORM\Column(type: 'string', length: 255, options: ['default' => 'unknown'])]
+    private string $name = 'unknown';
 
-    #[ORM\Column(type: 'string', length: 100)]
-    private string $mime;
+    #[ORM\Column(type: 'string', length: 100, options: ['default' => 'application/octet-stream'])]
+    private string $mime = 'application/octet-stream';
 
-    #[ORM\Column(type: 'integer')]
-    private int $bytes;
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private int $bytes = 0;
 
-    #[ORM\Column(type: 'string', length: 500)]
-    private string $realPath;
+    #[ORM\Column(type: 'string', length: 500, options: ['default' => '/'])]
+    private string $realPath = '/';
 
     #[ORM\Column(type: 'datetime_immutable')]
     private DateTimeImmutable $createdAt;

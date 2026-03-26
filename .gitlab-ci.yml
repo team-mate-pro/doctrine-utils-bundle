@@ -1,0 +1,20 @@
+# =============================================================================
+# doctrine-utils-bundle CI/CD configuration
+# Uses shared templates from sh/tmp-infra
+# =============================================================================
+#
+# This is a PHP library (Composer package), not a deployable app.
+# Static analysis + auto-publish to GitLab Composer registry on main.
+#
+# =============================================================================
+
+variables:
+  COMPOSE_FILE: docker-compose.gitlab.yml
+
+include:
+  - project: 'sh/tmp-infra'
+    ref: main
+    file:
+      - '/templates/common.yml'
+      - '/templates/docker-app-php-proxy-nginx/static-analysis.yml'
+      - '/templates/library/publish_public.yml'

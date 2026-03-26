@@ -1,7 +1,7 @@
 {
   "name": "team-mate-pro/doctrine-utils-bundle",
   "description": "Doctrine utilities bundle for Team Mate Pro - handles file persistence and other Doctrine enhancements",
-  "version": "1.0.8",
+  "version": "1.1.0",
   "type": "symfony-bundle",
   "license": "MIT",
   "require": {
@@ -28,9 +28,9 @@
   },
   "scripts": {
     "phpunit": "APP_ENV=test ./vendor/bin/phpunit tests --testdox --colors=always",
-    "tests:unit": "@phpunit",
-    "phpcs": "php ./vendor/bin/phpcs --standard=phpcs.xml --exclude=Generic.Files.LineLength",
-    "phpcs:fix": "php ./vendor/bin/phpcbf --standard=phpcs.xml --exclude=Generic.Files.LineLength",
+    "tests:unit": "APP_ENV=test php bin/console tmp:tests --suite unit --no-warmup --coverage 90",
+    "phpcs:check": "php vendor/bin/phpcs",
+    "phpcs:fix": "php vendor/bin/phpcbf",
     "phpstan": "php vendor/phpstan/phpstan/phpstan analyse --memory-limit=1G",
     "phpstan:baseline": "php vendor/phpstan/phpstan/phpstan analyse --memory-limit=1G --generate-baseline"
   },
@@ -47,7 +47,12 @@
     "phpstan/phpstan-symfony": "*",
     "phpstan/extension-installer": "*",
     "team-mate-pro/make": "^1.0",
-    "squizlabs/php_codesniffer": "^4.0"
+    "team-mate-pro/tests-bundle": "^1.22",
+    "squizlabs/php_codesniffer": "^4.0",
+    "symfony/console": "^7.0",
+    "symfony/http-kernel": "^7.0",
+    "symfony/var-exporter": "^7.0",
+    "symfony/yaml": "^7.0"
   },
   "authors": [
     {
@@ -58,6 +63,14 @@
   "config": {
     "allow-plugins": {
       "phpstan/extension-installer": true
+    },
+    "platform": {
+      "php": "8.3.0",
+      "ext-simplexml": "8.3.0",
+      "ext-xml": "8.3.0",
+      "ext-dom": "8.3.0",
+      "ext-xmlwriter": "8.3.0",
+      "ext-fileinfo": "8.3.0"
     }
   }
 }
